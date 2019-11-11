@@ -18,6 +18,8 @@ void openAccount();
 bool checkPhone(string);
 bool checkName(string);
 bool checkPassword(string);
+int genAccNum(int);
+int hashPW(string);
 
 /*--------------------------------------class--------------------------------------*/
 
@@ -194,7 +196,7 @@ void bankMenu(string accountName, int accountNumber) {
 }
 
 
-void openAccount() {
+void Account::openAccount() {
 	string accountName, accountName_confirm;
 	string phoneNumber, phoneNumber_confirm;
 	string accountPassword, accountPassword_confirm;
@@ -262,12 +264,16 @@ void openAccount() {
 
 //the function of checking the phone number requirement
 bool checkPhone(string s){
+
+	//let array cstr to contain the phone number
 	char *cstr = new char[s.length() + 1];
 
+	//copy string s to cstr array
 	strcpy(cstr, s.c_str());
 
 	int counter = 0;
 
+	//for-loop for checking the phone requirement
 	for (int i = 0; i < s.length(); i++) {
 		if ((int(cstr[i]) >= 48) && (int(cstr[i]) <= 57) && s.length() == 8) {
 		}
@@ -276,6 +282,7 @@ bool checkPhone(string s){
 		}
 	}
 
+	//the condition of checking
 	if (counter > 0) {
 		cout << endl;
 		cout << "Not Match The Phone Number Requirement." << endl;
@@ -288,14 +295,17 @@ bool checkPhone(string s){
 	}
 }
 
-//the function of checking the name requirment
+//the function of checking the name requirement
 bool checkName(string s) {
 
+	//let array cstr to contain the account holder name
 	char *cstr = new char[s.length() + 1];
 
+	//copy string s to cstr array
 	strcpy(cstr, s.c_str());
 
 	int counter = 0;
+
 
 	for (int i = 0; i < s.length(); i++) {
 		if (int(cstr[i]) == 32 || (int(cstr[i]) >= 65 && int(cstr[i]) <= 90) || (int(cstr[i]) >= 97 && int(cstr[i]) <= 122)) {
@@ -317,6 +327,7 @@ bool checkName(string s) {
 	}
 }
 
+//the function of checking the password requirement
 bool checkPassword(string s) {
 	char *cstr = new char[s.length() + 1];
 
@@ -348,5 +359,21 @@ bool checkPassword(string s) {
 	}
 }
 
+int genAccNum(int phNum) {
+	
+	int acNum;
 
-//11-11-2019 00:56
+	srand(phNum);
+
+	acNum = (567000000 + rand() % 999999);
+
+	return acNum;
+}
+
+int hashPW(string PW) {
+	int hashPw;
+	hash<string> str_hash;
+	hashPw = str_hash(PW);
+	return hashPw;
+}
+

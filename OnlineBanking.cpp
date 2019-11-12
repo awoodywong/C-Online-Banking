@@ -196,16 +196,18 @@ void bankMenu(string accountName, int accountNumber) {
 }
 
 
-void Account::openAccount() {
+void openAccount() {
 	string accountName, accountName_confirm;
 	string phoneNumber, phoneNumber_confirm;
 	string accountPassword, accountPassword_confirm;
 	double accountBalance;
 	system("cls");
-	/*---------------------------------------account holder name------------------------------------------*/
+	/*-----------------------------account holde name------------------------------------------*/
 
 		 //do-while loop  for checking the name requirment
 	do {
+        cin.ignore(256, '\n');
+        cin.clear();
 		//do-while loop for input account holder name and confirm
 		do {
 			if (accountName_confirm != accountName) {
@@ -220,12 +222,14 @@ void Account::openAccount() {
 			getline(cin, accountName_confirm);
 		} while (accountName_confirm != accountName);
 
-		//call the function checkName for check the name requirment
+        //call the function checkName for check the name requirment
 	} while (!checkName(accountName));
 
 	cout << endl;
-	/*-----------------------------------account holder phone number--------------------------------------*/
+	/*------------------------account holder phone number--------------------------------------*/
 	do {
+        cin.ignore(256, '\n');
+        cin.clear();
 		do {
 			if (phoneNumber_confirm != phoneNumber) {
 				cout << endl;
@@ -239,11 +243,13 @@ void Account::openAccount() {
 			getline(cin, phoneNumber_confirm);
 		} while (phoneNumber_confirm != phoneNumber);
 	} while (!checkPhone(phoneNumber));
-	/*------------------------------------account password------------------------------------------------*/
+	/*-------------------------account password------------------------------------------------*/
 	cout << endl;
 
 	//do-while loop for checking the password requirement
 	do {
+        cin.ignore(256, '\n');
+        cin.clear();
 		//do-while loop for  confirm the password
 		do {
 			if (accountPassword_confirm != accountPassword) {
@@ -287,6 +293,8 @@ bool checkPhone(string s){
 		cout << endl;
 		cout << "Not Match The Phone Number Requirement." << endl;
 		cout << "Please Enter Again." << endl;
+        cout << "Press Enter Button To Continue";
+        system("pause");
 		cout << endl;
 		return 0;
 	}
@@ -319,6 +327,8 @@ bool checkName(string s) {
 		cout << endl;
 		cout << "Not Match The Name Requirement." << endl;
 		cout << "Please Enter Again." << endl;
+        cout << "Press Enter Button To Continue";
+        system("pause");
 		cout << endl;
 		return 0;
 	}
@@ -351,6 +361,8 @@ bool checkPassword(string s) {
 		cout << endl;
 		cout << "Not Match The Password Requirement." << endl;
 		cout << "Please Enter Again." << endl;
+        cout << "Press Enter Button To Continue";
+        system("pause");
 		cout << endl;
 		return 0;
 	}

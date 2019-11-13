@@ -1,0 +1,59 @@
+/*<phone number check>*/
+
+    //input and check the phone number of open account
+    do{
+        
+        //if the phone is not 8-digit
+        if (check == 0){
+          cout << "Phone Number Should Be 8-digit Input!" << endl;
+        }
+        //do-while loop of input phone number
+      do{
+        cout << "Enter Your Phone Number: ";
+        
+        //for checking input is it number//input the phone number
+        while (!(cin >> phoneNumber) || phoneNumber <= 0){
+            cout << "NOT Phone Number Format! Please Enter Again!" << endl;
+            cout << "Enter your phone number: ";
+            cin.clear(); //Reset the input error status to no error
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); //Discard the content in the input sequence
+        }
+        
+        //for checking input is it number//confirm the phone number
+        cout << "Confirm Your Phone Number: ";
+        while (!(cin >> phoneNumber_confirm) || phoneNumber <= 0){
+          
+            cout << "NOT Match, Please Enter Again." << endl;
+            cout << "Comfirm Your Phone Number: ";
+            cin.clear(); //Reset the input error status to no error
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');//Discard the content in the input sequence
+        }
+      }
+        //while loop if phone number and the confirm is not the same
+      while (phoneNumber_confirm != phoneNumber);
+        
+        //check the phone is it 8-digit
+      check = countDigit(phoneNumber);
+    }
+        //do-while loop for checking the digit of the phone number
+    while(check == 0);
+
+
+
+
+    //the function of checking how many digit of phone number
+bool countDigit(int num){
+  int counter = 0;
+
+  while(num > 0){
+    num /= 10;
+    counter++;
+  }
+
+  if (counter == 8){
+    return 1;
+  }
+  else{
+    return 0;
+  }
+}

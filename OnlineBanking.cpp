@@ -28,15 +28,12 @@ void inputReq();
 
 class Account {
 private:
-	string acHolderName, acPassword, phNumber;
-	int acNumber;
-	double acBalance;
+	string name, password;
+	int acNum, tel;
+	double balance;
 
 public:
-	void openAccount();
-	void transfer();
-	void depoist();
-	void withdraw();
+
 
 
 };
@@ -72,38 +69,55 @@ void credits() {
 //menu
 void menu(string file_name) {
 	string menuOption;
-	system("cls");
-	cout << "*** Main Menu ***" << endl;
-	cout << "[1] Open Account" << endl;
-	cout << "[2] Login" << endl;
-	cout << "[3] List All Account" << endl;
-	cout << "[4] Credits" << endl;
-	cout << "[5] Exist" << endl;
-	cout << "*****************" << endl;
-	cout << "Option (1 - 5): ";
-	cin >> menuOption; 
-
-	if (menuOption == "1") {
+	do {
 		system("cls");
-		inputReq();
-		writeFile_openAC(file_name);
-	}
-	else if (menuOption == "2") {
+		cout << "*** Main Menu ***" << endl;
+		cout << "[1] Open Account" << endl;
+		cout << "[2] Login" << endl;
+		cout << "[3] List All Account" << endl;
+		cout << "[4] Credits" << endl;
+		cout << "[5] Exist" << endl;
+		cout << "*****************" << endl;
+		cout << "Option (1 - 5): ";
+		cin >> menuOption;
 
-	}
-	else if (menuOption == "3") {
-		system("cls");
-		readFile(file_name);
-	}
-	else if (menuOption == "4") {
-		credits();
-	}
-	else if (menuOption == "5") {
+		if (menuOption == "1") {
+			system("cls");
+			inputReq();
+			writeFile_openAC(file_name);
+		}
+		else if (menuOption == "2") {
 
-	}
-	else {
-		cout << "No This Option" << endl;
-	}
+		}
+		else if (menuOption == "3") {
+			system("cls");
+			readFile(file_name);
+			system("pause");
+		}
+		else if (menuOption == "4") {
+			credits();
+		}
+		else if (menuOption == "5") {
+			char n;
+			cout << "Are You Sure To Exit?" << endl;
+			cout << "Press \"Y/y\" For YES, \"N/n\" For NO: ";
+			cin >> n;
+			if (n == 'Y' || n == 'y') {
+				system("cls");
+				cout << "Thanks For Using Online Banking." << endl;
+				break;
+			}
+			else if (n == 'N' || n == 'n') {
+
+			}
+			else {
+				cout << "\a";
+			}
+		}
+		else {
+			cout << "\a";
+		}
+	} while (menuOption != "5");
 }
 
 void readFile(string file_name) {
@@ -137,7 +151,7 @@ void writeFile_openAC(string file_name) {
 	ofstream outFile;
 
 	// file is written and put in same folder as source code
-	outFile.open(file_name);
+	outFile.open(file_name, ios::app);
 
 	// data fields to write into file
 	name = acName_input();
@@ -156,6 +170,21 @@ void writeFile_openAC(string file_name) {
 
 	// close the file
 	outFile.close();
+
+	system("cls");
+
+	cout << "---A New Bank Account Created---" << endl;
+	cout << endl;
+	cout << "The Following Is Your Account Information" << endl;
+	cout << endl;
+	cout << setw(30) << left << "Account Holder Name:" << name << endl;
+	cout << setw(30) << left << "Account Number:" << acc_no << endl;
+	cout << setw(30) << left << "Mobile Phone Number:" << tel << endl;
+	cout << setw(30) << left << "Account Balance:" << fixed << balance << " HKD" << endl;
+	cout << endl;
+	cout << "*****PLEASE WRITE DOWN YOUR ACCOUNT NUMBER BY YOURSELF*****" << endl;
+	cout << endl;
+	system("pause");
 }
 
 void bankMenu(string accountName, int accountNumber) {
@@ -358,7 +387,7 @@ bool checkName(string s) {
 
 
 	for (int i = 0; i < s.length(); i++) {
-		if (int(cstr[i]) == 32 || (int(cstr[i]) >= 65 && int(cstr[i]) <= 90) || (int(cstr[i]) >= 97 && int(cstr[i]) <= 122) || s.length() > 20) {
+		if (int(cstr[i]) == 32 || (int(cstr[i]) >= 65 && int(cstr[i]) <= 90) || (int(cstr[i]) >= 97 && int(cstr[i]) <= 122) || s.length() <= 20) {
 		}
 		else {
 			counter++;

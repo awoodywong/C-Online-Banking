@@ -23,6 +23,9 @@ string acPw_input();
 int genAccNum(int);
 double balance_input();
 void inputReq();
+double deposit();
+double withdraw();
+bool ynexit();
 
 /*--------------------------------------class--------------------------------------*/
 
@@ -31,10 +34,115 @@ private:
 	string name, password;
 	int acNum, tel;
 	double balance;
+	size_t hash_val;
 
 public:
+	/*Account(string acName, size_t hash_pw , int acc_no, int acTel, double bal) {
+		name = acName;
+		acNum = acc_no;
+		tel = acTel;
+		balance = bal;
+	}*/
 
+	string getName() {
+		return name;
+	}
 
+	void setName(string acName) {
+		name = acName;
+	}
+
+	int getAcNum() {
+		return acNum;
+	}
+
+	void setAcNum(int acc_no) {
+		acNum = acc_no;
+	}
+
+	int getTel() {
+		return tel;
+	}
+
+	void setTel(int acTel) {
+		tel = acTel;
+	}
+
+	double getBalance() {
+		return balance;
+	}
+
+	void setBalance(double bal) {
+		balance = bal;
+	}
+
+	void bankMenu() {
+		string bankMenuOption;
+		do {
+			system("cls");
+			cout << "Hello, " << name << endl;
+			cout << "Account NO: " << acNum << endl;
+			cout << "***** Bank Menu *****" << endl;
+			cout << "[1] Check Balance" << endl;
+			cout << "[2] Deposit" << endl;
+			cout << "[3] Withdraw" << endl;
+			cout << "[4] Transfer" << endl;
+			cout << "[5] Fixed Deposit Enquiry" << endl;
+			cout << "[6] Update Account Info" << endl;
+			cout << "[7] Logout" << endl;
+			cout << "*********************" << endl;
+			cout << "Option (1 - 7): ";
+			cin >> bankMenuOption;
+
+			if (bankMenuOption == "1") {
+				system("cls");
+				cout << setw(30) << left << "Account Holder Name:" << name << endl;
+				cout << setw(30) << left << "Account Number:" << acNum << endl;
+				cout << setw(30) << left << "Account Balance:" << fixed << balance << " HKD" << endl;
+				system("pause");
+			}
+			else if (bankMenuOption == "2") {
+				double deposit_amount;
+				system("cls");
+				deposit_amount = deposit();
+				balance += deposit_amount;
+				cout << endl;
+				cout << "-----SUCCESS-----" << endl;
+				system("pause");
+			}
+			else if (bankMenuOption == "3") {
+				double withdraw_amount;
+				system("cls");
+				withdraw_amount = withdraw();
+				balance -= withdraw_amount;
+				cout << endl;
+				cout << "-----SUCCESS-----" << endl;
+				system("ppause");
+			}
+			else if (bankMenuOption == "4") {
+
+			}
+			else if (bankMenuOption == "5") {
+
+			}
+			else if (bankMenuOption == "6") {
+
+			}
+			else if (bankMenuOption == "7") {
+				if (ynexit()) {
+					system("cls");
+					cout << "Thanks For Using Online Banking." << endl;
+					break;
+				}
+				else {
+
+				}
+			}
+			else {
+				cout << "\a";
+			}
+		} while (bankMenuOption != "7");
+	}
 
 };
 
@@ -68,6 +176,7 @@ void credits() {
 
 //menu
 void menu(string file_name) {
+	Account ac;
 	string menuOption;
 	do {
 		system("cls");
@@ -95,7 +204,9 @@ void menu(string file_name) {
 			system("pause");
 		}
 		else if (menuOption == "4") {
+			system("cls");
 			credits();
+			system("pause");
 		}
 		else if (menuOption == "5") {
 			char n;
@@ -141,6 +252,9 @@ void readFile(string file_name) {
 }
 
 void writeFile_openAC(string file_name) {
+
+	Account ac;
+
 	// set up the hash function
 	hash<string> str_hash;
 	// open the file
@@ -154,8 +268,8 @@ void writeFile_openAC(string file_name) {
 	outFile.open(file_name, ios::app);
 
 	// data fields to write into file
-	name = acName_input();
 	tel = phNum_input();
+	name = acName_input();
 	pw = acPw_input();
 	acc_no = genAccNum(tel);
 	hash_val = str_hash(pw);
@@ -171,6 +285,11 @@ void writeFile_openAC(string file_name) {
 	// close the file
 	outFile.close();
 
+	ac.setName(name);
+	ac.setAcNum(acc_no);
+	ac.setTel(tel);
+	ac.setBalance(balance);
+
 	system("cls");
 
 	cout << "---A New Bank Account Created---" << endl;
@@ -185,9 +304,10 @@ void writeFile_openAC(string file_name) {
 	cout << "*****PLEASE WRITE DOWN YOUR ACCOUNT NUMBER BY YOURSELF*****" << endl;
 	cout << endl;
 	system("pause");
+	ac.bankMenu();
 }
 
-void bankMenu(string accountName, int accountNumber) {
+/*void bankMenu(string accountName, int accountNumber) {
 	string bankMenuOption;
 	do {
 		system("cls");
@@ -231,7 +351,7 @@ void bankMenu(string accountName, int accountNumber) {
 
 		}
 	} while (bankMenuOption != "8");
-}
+}*/
 
 
 string acName_input() {
@@ -258,9 +378,10 @@ string acName_input() {
 	} while (!checkName(accountName));
 
 	cout << endl;
+	cout << "Press The ENTER BUTTON To Continue." << endl;
 	return accountName;
 }
-	/*------------------------account holder phone number--------------------------------------*/
+/*------------------------account holder phone number--------------------------------------*/
 int phNum_input() {
 	int phoneNumber = 0, phoneNumber_confirm = phoneNumber;
 	do {
@@ -451,11 +572,11 @@ int genAccNum(int phNum) {
 
 void inputReq() {
 	cout << "***************Information Requirement***************" << endl;
+	cout << setw(30) << left << "Mobile Phone Number:" << "Mobile Phone Number Shoould Be An 8-Digit Input." << endl;
+	cout << endl;
 	cout << setw(30) << left << "Account Holder Name:" << "The Account Holder Name Does Not Containe Any Digits" << endl;
 	cout << setw(30) << " " << " Or Other Symbols Except The Alphabets And The Space Charactor. It Should Be At" << endl;
 	cout << setw(30) << " " << " Most 20-Charater Long." << endl;
-	cout << endl;
-	cout << setw(30) << left << "Mobile Phone Number:" << "Mobile Phone Number Shoould Be An 8-Digit Input." << endl;
 	cout << endl;
 	cout << setw(30) << left << "Account Password: " << "Account Password Should Be Of At Least 8-Charater Long, Which" << endl;
 	cout << setw(30) << " " << " Includes At Least One Capital Letter, One Small Letter And One Digit." << endl;
@@ -464,4 +585,38 @@ void inputReq() {
 	cout << "*****************************************************" << endl;
 }
 
+double deposit() {
+	double amount;
+	cout << "***************DEPOSIT***************" << endl;
+	cout << setw(30) << left << "Deposit Amount:";
+	cin >> amount;
 
+	return amount;
+}
+
+double withdraw() {
+	double amount;
+	cout << "***************WITHDRAW***************" << endl;
+	cout << setw(30) << left << "Withdraw Amount:";
+	cin >> amount;
+
+	return amount;
+}
+
+bool ynexit() {
+	char n;
+	do {
+		cout << "Are You Sure To Logout?" << endl;
+		cout << "Press \"Y/y\" For YES, \"N/n\" For NO: ";
+		cin >> n;
+		if (n == 'Y' || n == 'y') {
+			return 1;
+		}
+		else if (n == 'N' || n == 'n') {
+			return 0;
+		}
+		else {
+			cout << "\a";
+		}
+	} while (n != 'Y' || n != 'y' || n != 'N' || n != 'n');
+}

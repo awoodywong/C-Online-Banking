@@ -97,7 +97,9 @@ public:
 			if (bankMenuOption == "1") {
 				system("cls");
 				cout << setw(30) << left << "Account Holder Name:" << name << endl;
+				cout << "------------------------------------------------------------------------------" << endl;
 				cout << setw(30) << left << "Account Number:" << acNum << endl;
+				cout << "------------------------------------------------------------------------------" << endl;
 				cout << setw(30) << left << "Account Balance:" << fixed << balance << " HKD" << endl;
 				system("pause");
 			}
@@ -129,14 +131,20 @@ public:
 
 			}
 			else if (bankMenuOption == "7") {
-				if (ynexit()) {
-					system("cls");
-					cout << "Thanks For Using Online Banking." << endl;
+
+				cout << "Are You Sure To Logout?" << endl;
+				bool x = ynexit();
+
+				if (x) {
+					cout << "Thanks For Using Online Banking System." << endl;
 					break;
 				}
-				else {
 
+				else {
+					bankMenuOption = "8";
+					cout << "\a";
 				}
+
 			}
 			else {
 				cout << "\a";
@@ -209,19 +217,16 @@ void menu(string file_name) {
 			system("pause");
 		}
 		else if (menuOption == "5") {
-			char n;
 			cout << "Are You Sure To Exit?" << endl;
-			cout << "Press \"Y/y\" For YES, \"N/n\" For NO: ";
-			cin >> n;
-			if (n == 'Y' || n == 'y') {
-				system("cls");
-				cout << "Thanks For Using Online Banking." << endl;
+			bool x = ynexit();
+
+			if (x) {
+				cout << "Thanks For Using Online Banking System." << endl;
 				break;
 			}
-			else if (n == 'N' || n == 'n') {
 
-			}
 			else {
+				menuOption = "6";
 				cout << "\a";
 			}
 		}
@@ -307,53 +312,6 @@ void writeFile_openAC(string file_name) {
 	ac.bankMenu();
 }
 
-/*void bankMenu(string accountName, int accountNumber) {
-	string bankMenuOption;
-	do {
-		system("cls");
-		cout << "Hello, " << accountName << endl;
-		cout << "Account NO: " << accountNumber << endl;
-		cout << "***** Bank Menu *****" << endl;
-		cout << "[1] Check Balance" << endl;
-		cout << "[2] Deposit" << endl;
-		cout << "[3] Withdraw" << endl;
-		cout << "[4] Transfer" << endl;
-		cout << "[5] Fixed Deposit Enquiry" << endl;
-		cout << "[6] Update Account Info" << endl;
-		cout << "[7] Logout" << endl;
-		cout << "*********************" << endl;
-		cout << "Option (1 - 7): ";
-		cin >> bankMenuOption;
-		system("cls");
-
-		if (bankMenuOption == "1") {
-
-		}
-		else if (bankMenuOption == "2") {
-
-		}
-		else if (bankMenuOption == "3") {
-
-		}
-		else if (bankMenuOption == "4") {
-
-		}
-		else if (bankMenuOption == "5") {
-
-		}
-		else if (bankMenuOption == "6") {
-
-		}
-		else if (bankMenuOption == "7") {
-
-		}
-		else {
-
-		}
-	} while (bankMenuOption != "8");
-}*/
-
-
 string acName_input() {
 	string accountName, accountName_confirm;
 	//do-while loop  for checking the name requirment
@@ -364,13 +322,13 @@ string acName_input() {
 		do {
 			if (accountName_confirm != accountName) {
 				cout << endl;
-				cout << "Not Match, Please Enter Again" << endl;
+				cout << "-Not Match, Please Enter Again-" << endl;
 				cout << endl;
 			}
-			cout << "Enter the name: ";
+			cout << setw(30) << left << "Enter the name: ";
 			getline(cin, accountName);
 
-			cout << "Confirm the name: ";
+			cout << setw(30) << left << "Confirm the name: ";
 			getline(cin, accountName_confirm);
 		} while (accountName_confirm != accountName);
 
@@ -378,7 +336,7 @@ string acName_input() {
 	} while (!checkName(accountName));
 
 	cout << endl;
-	cout << "Press The ENTER BUTTON To Continue." << endl;
+	cout << "<<Press The ENTER BUTTON To Continue>>" << endl;
 	return accountName;
 }
 /*------------------------account holder phone number--------------------------------------*/
@@ -391,28 +349,28 @@ int phNum_input() {
 
 			if (phoneNumber_confirm != phoneNumber) {
 				cout << endl;
-				cout << "Not Match, Please Enter Again." << endl;
+				cout << "-Not Match, Please Enter Again-" << endl;
 				cout << endl;
 			}
 
-			cout << "Enter Your Phone Number: ";
+			cout << setw(30) << left << "Enter Your Phone Number: ";
 			while (!(cin >> phoneNumber) || phoneNumber <= 0) {
 				cout << endl;
-				cout << "Not Match The Phone Number Requirement." << endl;
-				cout << "Please Enter Again." << endl;
+				cout << "-Not Match The Phone Number Requirement-" << endl;
+				cout << "-Please Enter Again-" << endl;
 				cout << endl;
-				cout << "Enter Your Phone Number: ";
+				cout << setw(30) << left << "Enter Your Phone Number: ";
 				cin.clear(); //Reset the input error status to no error
 				cin.ignore(256, '\n'); //Discard the content in the input sequence
 			}
 
-			cout << "Confirm Your Phone Number: ";
+			cout << setw(30) << left << "Confirm Your Phone Number: ";
 			while (!(cin >> phoneNumber_confirm) || phoneNumber <= 0) {
 				cout << endl;
-				cout << "Not Match The Phone Number Requirement." << endl;
-				cout << "Please Enter Again." << endl;
+				cout << "-Not Match The Phone Number Requirement-" << endl;
+				cout << "-Please Enter Again-" << endl;
 				cout << endl;
-				cout << "Confirm Your Phone Number: ";
+				cout << setw(30) << left << "Confirm Your Phone Number: ";
 				cin.clear(); //Reset the input error status to no error
 				cin.ignore(256, '\n');//Discard the content in the input sequence
 			}
@@ -441,13 +399,13 @@ string acPw_input() {
 		do {
 			if (accountPassword_confirm != accountPassword) {
 				cout << endl;
-				cout << "Not Match, Please Enter Again" << endl;
+				cout << "-Not Match, Please Enter Again-" << endl;
 				cout << endl;
 			}
-			cout << "Enter Your Account Password: ";
+			cout << setw(30) << left << "Enter Your Account Password: ";
 			getline(cin, accountPassword);
 
-			cout << "Confirm Your Account Password: ";
+			cout << setw(30) << left << "Confirm Your Account Password: ";
 			getline(cin, accountPassword_confirm);
 		} while (accountPassword_confirm != accountPassword);
 	} while (!checkPassword(accountPassword));
@@ -465,8 +423,8 @@ double balance_input() {
 		cin >> bal;
 		if (bal < 100) {
 			cout << endl;
-			cout << "The Initial Amount Must Be At Least $100" << endl;
-			cout << "Please Enter Again" << endl;
+			cout << "-The Initial Amount Must Be At Least $100-" << endl;
+			cout << "-Please Enter Again-" << endl;
 			cout << endl;
 		}
 	} 
@@ -488,8 +446,8 @@ bool checkPhone(int num) {
 	}
 	else {
 		cout << endl;
-		cout << "Not Match The Phone Number Requirement." << endl;
-		cout << "Please Enter Again." << endl;
+		cout << "-Not Match The Phone Number Requirement-" << endl;
+		cout << "-Please Enter Again-" << endl;
 		cout << endl;
 		return 0;
 	}
@@ -508,7 +466,7 @@ bool checkName(string s) {
 
 
 	for (int i = 0; i < s.length(); i++) {
-		if (int(cstr[i]) == 32 || (int(cstr[i]) >= 65 && int(cstr[i]) <= 90) || (int(cstr[i]) >= 97 && int(cstr[i]) <= 122) || s.length() <= 20) {
+		if (int(cstr[i]) == 32 || (int(cstr[i]) >= 65 && int(cstr[i]) <= 90) || (int(cstr[i]) >= 97 && int(cstr[i]) <= 122) || (s.length() <= 20)) {
 		}
 		else {
 			counter++;
@@ -517,8 +475,8 @@ bool checkName(string s) {
 
 	if (counter > 0) {
 		cout << endl;
-		cout << "Not Match The Name Requirement." << endl;
-		cout << "Please Enter Again." << endl;
+		cout << "-Not Match The Name Requirement-" << endl;
+		cout << "-Please Enter Again-" << endl;
 		cout << endl;
 		return 0;
 	}
@@ -549,8 +507,8 @@ bool checkPassword(string s) {
 
 	if ((counter_Cap == 0) || (counter_Sma == 0) || (counter_Num == 0) || (s.length() < 8)) {
 		cout << endl;
-		cout << "Not Match The Password Requirement." << endl;
-		cout << "Please Enter Again." << endl;
+		cout << "-Not Match The Password Requirement-" << endl;
+		cout << "-Please Enter Again-" << endl;
 		cout << endl;
 		return 0;
 	}
@@ -606,7 +564,6 @@ double withdraw() {
 bool ynexit() {
 	char n;
 	do {
-		cout << "Are You Sure To Logout?" << endl;
 		cout << "Press \"Y/y\" For YES, \"N/n\" For NO: ";
 		cin >> n;
 		if (n == 'Y' || n == 'y') {

@@ -6,6 +6,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <string>
+#include <sstream>
 #include <cstring>
 
 using namespace std;
@@ -24,8 +25,10 @@ int genAccNum(int);
 double balance_input();
 void inputReq();
 double deposit();
-double withdraw();
+double withdraw(double);
 bool ynexit();
+void login(string);
+bool searchPhone(string, int);
 
 /*--------------------------------------class--------------------------------------*/
 
@@ -115,11 +118,11 @@ public:
 			else if (bankMenuOption == "3") {
 				double withdraw_amount;
 				system("cls");
-				withdraw_amount = withdraw();
+				withdraw_amount = withdraw(balance);
 				balance -= withdraw_amount;
 				cout << endl;
 				cout << "-----SUCCESS-----" << endl;
-				system("ppause");
+				system("pause");
 			}
 			else if (bankMenuOption == "4") {
 
@@ -204,7 +207,8 @@ void menu(string file_name) {
 			writeFile_openAC(file_name);
 		}
 		else if (menuOption == "2") {
-
+			system("cls");
+			login(file_name);
 		}
 		else if (menuOption == "3") {
 			system("cls");
@@ -237,19 +241,47 @@ void menu(string file_name) {
 }
 
 void readFile(string file_name) {
-	char line[100];
-
+	char num[100];
+	char tel[100];
+	char name[100];
+	char pw[100];
+	char balance[100];
+	int size;
+	streampos begin, end;
 	// open the file
 	ifstream inFile;
 
 	// file should be put in same folder as the source code file
 	inFile.open(file_name);
+	begin = inFile.tellg();
+	inFile.seekg(0, ios::end);
+	end = inFile.tellg();
+	size = end - begin;
 
+	inFile.seekg(0, ios::beg);
+
+	cout << setw(30) << left << "Account Number" << setw(30) << left << "Account Holder Name" << setw(25) << left << "Mobile Phone Number" << setw(20) << left << "Hashed Password" << setw(20) << left << "Balance" << endl;
+	cout << "-------------------------------------------------------------------------------------------------------------------------" << endl;
 	// repeat until end of file is reached
-	while (!inFile.eof()) {
+	while (inFile.tellg() != size) {
 		// get each line from file and print
-		inFile.getline(line, 100, '\n');
-		cout << line << endl;
+		inFile.seekg(inFile.tellg());
+		inFile.getline(num, 100, '\t');
+
+		inFile.seekg(inFile.tellg());
+		inFile.getline(name, 100, '\t');
+
+		inFile.seekg(inFile.tellg());
+		inFile.getline(tel, 100, '\t');
+
+		inFile.seekg(inFile.tellg());
+		inFile.getline(pw, 100, '\t');
+		inFile.seekg(inFile.tellg());
+
+		inFile.getline(balance, 100, '\n');
+		inFile.seekg(inFile.tellg());
+
+		cout << setw(30) << left << num << setw(30) << left << name << setw(25) << left << tel << setw(20) << left << pw << setw(20)<< left << balance << endl;
 	}
 
 	// close the file
@@ -274,6 +306,11 @@ void writeFile_openAC(string file_name) {
 
 	// data fields to write into file
 	tel = phNum_input();
+	if (!searchPhone(file_name, tel)) {
+		cout << "***This Mobile Phone Number Has Already Been Registered***" << endl;
+		system("pause");
+		return;
+	}
 	name = acName_input();
 	pw = acPw_input();
 	acc_no = genAccNum(tel);
@@ -325,10 +362,10 @@ string acName_input() {
 				cout << "-Not Match, Please Enter Again-" << endl;
 				cout << endl;
 			}
-			cout << setw(30) << left << "Enter the name: ";
+			cout << setw(40) << left << "Enter The Account Holder Name: ";
 			getline(cin, accountName);
 
-			cout << setw(30) << left << "Confirm the name: ";
+			cout << setw(40) << left << "Confirm The Account Holder Name: ";
 			getline(cin, accountName_confirm);
 		} while (accountName_confirm != accountName);
 
@@ -339,7 +376,7 @@ string acName_input() {
 	cout << "<<Press The ENTER BUTTON To Continue>>" << endl;
 	return accountName;
 }
-/*------------------------account holder phone number--------------------------------------*/
+//account holder phone number
 int phNum_input() {
 	int phoneNumber = 0, phoneNumber_confirm = phoneNumber;
 	do {
@@ -387,7 +424,7 @@ int phNum_input() {
 	return phoneNumber;
 }
 
-/*-------------------------account password------------------------------------------------*/
+//account password
 string acPw_input() {
 
 	string accountPassword, accountPassword_confirm;
@@ -466,7 +503,7 @@ bool checkName(string s) {
 
 
 	for (int i = 0; i < s.length(); i++) {
-		if (int(cstr[i]) == 32 || (int(cstr[i]) >= 65 && int(cstr[i]) <= 90) || (int(cstr[i]) >= 97 && int(cstr[i]) <= 122) || (s.length() <= 20)) {
+		if ((int(cstr[i]) == 32 || (int(cstr[i]) >= 65 && int(cstr[i]) <= 90) || (int(cstr[i]) >= 97 && int(cstr[i]) <= 122) )&&( (s.length() <= 20))) {
 		}
 		else {
 			counter++;
@@ -547,16 +584,34 @@ double deposit() {
 	double amount;
 	cout << "***************DEPOSIT***************" << endl;
 	cout << setw(30) << left << "Deposit Amount:";
-	cin >> amount;
+	while (!(cin >> amount) || (amount < 0)) {
+		cout << endl;
+		cout << "-The Input Is Not A Number / Negative Amount-" << endl;
+		system("pause");
+		system("cls");
+		cout << "***************DEPOSIT***************" << endl;
+		cout << setw(30) << left << "Deposit Amount:";
+		cin.clear(); //Reset the input error status to no error
+		cin.ignore(256, '\n'); //Discard the content in the input sequence
+	}
 
 	return amount;
 }
 
-double withdraw() {
+double withdraw(double balance) {
 	double amount;
 	cout << "***************WITHDRAW***************" << endl;
 	cout << setw(30) << left << "Withdraw Amount:";
-	cin >> amount;
+	while (!(cin >> amount) || (amount < 0) || (amount > balance)) {
+		cout << endl;
+		cout << "-The Input Is Not A Number / Negative Amount / Over Your Balance-" << endl;
+		system("pause");
+		system("cls"); 
+		cout << "***************WITHDRAW***************" << endl;
+		cout << setw(30) << left << "Withdraw Amount:";
+		cin.clear(); //Reset the input error status to no error
+		cin.ignore(256, '\n'); //Discard the content in the input sequence
+	}
 
 	return amount;
 }
@@ -576,4 +631,179 @@ bool ynexit() {
 			cout << "\a";
 		}
 	} while (n != 'Y' || n != 'y' || n != 'N' || n != 'n');
+}
+
+void login(string file_name) {
+
+	Account ac;
+	hash<string> str_hash;
+
+	string num;
+	string tel;
+	string name;
+	string pw;
+	string balance;
+	int size;
+	int acnum;
+	int phNum;
+	double bal;
+	size_t hpw;
+	size_t hash_pw;
+	streampos begin, end;
+	bool check = false;
+
+	int ac_num;
+	string ac_pw;
+
+	cout << "*****Please Enter Ther Following Information*****" << endl;
+	cout << "-------------------------------------------------" << endl;
+	cout << setw(30) << left << "Account Number: ";
+	while (!(cin >> ac_num)) {
+		cout << endl;
+		cout << "-Not Match The Account Number Requirement-" << endl;
+		cout << "-Please Enter Again-" << endl;
+		system("pause");
+		system("cls");
+		cout << "*****Please Enter Ther Following Information*****" << endl;
+		cout << "-------------------------------------------------" << endl;
+		cout << setw(30) << left << "Account Number: ";
+		cin.clear(); //Reset the input error status to no error
+		cin.ignore(256, '\n'); //Discard the content in the input sequence
+	}
+	cout << setw(30) << left << "Account Password: ";
+	cin >> ac_pw;
+
+	hash_pw = str_hash(ac_pw);
+
+	// open the file
+	ifstream inFile;
+
+	// file should be put in same folder as the source code file
+	inFile.open(file_name);
+	begin = inFile.tellg();
+	inFile.seekg(0, ios::end);
+	end = inFile.tellg();
+	size = end - begin;
+
+	inFile.seekg(0, ios::beg);
+
+	// repeat until end of file is reached
+	while (inFile.tellg() != size) {
+		// get each line from file and print
+		inFile.seekg(inFile.tellg());
+		getline(inFile, num, '\t');
+
+		inFile.seekg(inFile.tellg());
+		getline(inFile, name, '\t');
+
+		inFile.seekg(inFile.tellg());
+		getline(inFile, tel, '\t');
+
+		inFile.seekg(inFile.tellg());
+		getline(inFile, pw, '\t');
+
+		inFile.seekg(inFile.tellg());
+		getline(inFile, balance, '\n');
+
+		inFile.seekg(inFile.tellg());
+
+		stringstream s1(num);
+		s1 >> acnum;
+
+		stringstream s2(tel);
+		s2 >> phNum;
+
+		stringstream s3(pw);
+		s3 >> hpw;
+
+		stringstream s4(balance);
+		s4 >> bal;
+		
+		if ((ac_num == acnum) && (hpw == hash_pw)) {
+			ac.setAcNum(acnum);
+			ac.setName(name);
+			ac.setTel(phNum);
+			ac.setBalance(bal);
+			check = true;
+		}
+		
+	}
+
+
+	// close the file
+	inFile.close();
+
+	if (check) {
+		ac.bankMenu();
+	}
+	else {
+		cout << "-----No This Account / Your Account Number Or Password Was Wrong-----" << endl;
+		system("pause");
+	}
+
+}
+
+bool searchPhone(string file_name, int tel_num) {
+	string num;
+	string tel;
+	string name;
+	string pw;
+	string balance;
+	int size;
+	int acnum;
+	int phNum;
+	double bal;
+	size_t hpw;
+	streampos begin, end;
+	// open the file
+	ifstream inFile;
+
+	// file should be put in same folder as the source code file
+	inFile.open(file_name);
+	begin = inFile.tellg();
+	inFile.seekg(0, ios::end);
+	end = inFile.tellg();
+	size = end - begin;
+
+	inFile.seekg(0, ios::beg);
+	// repeat until end of file is reached
+	while (inFile.tellg() != size) {
+		// get each line from file and print
+		inFile.seekg(inFile.tellg());
+		getline(inFile, num, '\t');
+
+		inFile.seekg(inFile.tellg());
+		getline(inFile, name, '\t');
+
+		inFile.seekg(inFile.tellg());
+		getline(inFile, tel, '\t');
+
+		inFile.seekg(inFile.tellg());
+		getline(inFile, pw, '\t');
+		inFile.seekg(inFile.tellg());
+
+		getline(inFile, balance, '\n');
+		inFile.seekg(inFile.tellg());
+
+		stringstream s1(num);
+		s1 >> acnum;
+
+		stringstream s2(tel);
+		s2 >> phNum;
+
+		stringstream s3(pw);
+		s3 >> hpw;
+
+		stringstream s4(balance);
+		s4 >> bal;
+
+		if (tel_num == phNum) {
+			return 0;
+		}
+	}
+
+	// close the file
+	inFile.close();
+
+	return 1;
 }

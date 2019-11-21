@@ -30,10 +30,11 @@ bool ynexit();
 void login(string, int, string);
 bool searchPhone(string, int);
 void updateFile(string, string, int, int, size_t, double);
-//bool transfer(string);
-//bool transSearch(string, int);
 double retTrans(string, int, int);
-//void transfer(string);
+void fixedDeposit(double, double, int);
+int update_tel();
+string update_pw();
+
 /*--------------------------------------class--------------------------------------*/
 
 class Account {
@@ -237,15 +238,125 @@ public:
 			}
 
 			else if (bankMenuOption == "5") {
+				double p, r;
+				int t;
+				system("cls");
+				cout << "***************FIXED DEPOSIT ENQUIRY***************" << endl;
+				cout << setw(50) << left << "Enter The Principal: ";
 
+				while (!(cin >> p) || (p < 0) || (p > balance)) {
+					cout << endl;
+					cout << "-The Input Is Not A Number / Negative Amount / Over Your Balance-" << endl;
+					system("pause");
+					system("cls");
+					cout << "***************FIXED DEPOSIT ENQUIRY***************" << endl;
+					cout << setw(50) << left << "Enter The Principal: ";
+					cin.clear(); //Reset the input error status to no error
+					cin.ignore(256, '\n'); //Discard the content in the input sequence
+				}
+
+				cout << setw(50) << left << "Enter The Interest Rate Per Year (In \%): ";
+				while (!(cin >> r) || (r < 0)) {
+					cout << endl;
+					cout << "-The Input Is Not A Number / Negative Amount" << endl;
+					system("pause");
+					cout << endl;
+					cout << setw(50) << left << "Enter The Interest Rate Per Year (In \%): ";
+					cin.clear(); //Reset the input error status to no error
+					cin.ignore(256, '\n'); //Discard the content in the input sequence
+				}
+
+				cout << setw(50) << left << "Enter The Period (In Months): ";
+				while (!(cin >> t) || (t < 0)) {
+					cout << endl;
+					cout << "-The Input Is Not A Number / Negative Amount" << endl;
+					system("pause");
+					cout << endl;
+					cout << setw(50) << left << "Enter The Period (In Months): ";
+					cin.clear(); //Reset the input error status to no error
+					cin.ignore(256, '\n'); //Discard the content in the input sequence
+				}
+
+				fixedDeposit(p, r, t);
 			}
 
 			else if (bankMenuOption == "6") {
+				system("cls");
+				hash<string> str_hash;
+				char n;
+				int new_tel;
+				string in_pw;
+				string new_pw;
+				size_t in_pw_h;
+				size_t new_hash;
+				cout << "***************UPDATE ACCOUNT INFORMATION***************" << endl;
+				cout << "Updat Which Information?" << endl;
+				cout << "(1) Mobile Phone Number" << endl;
+				cout << "(2) Password" << endl;
+				cout << "(3) Exit" << endl;
+				cout << "Chose The Option: ";
 
+				do {
+					cin >> n;
+
+					if (n == '1') {
+						system("cls");
+						cout << "***************UPDATE MOBILE PHONE NUMBER***************" << endl;
+						new_tel = update_tel();
+						cout << "Enter Your Account Password: ";
+						cin >> in_pw;
+						in_pw_h = str_hash(in_pw);
+
+						if (in_pw_h == hash_val) {
+							tel = new_tel;
+							updateFile(file_name, name, acNum, new_tel, hash_val, balance);
+							cout << "-UPDATE SUCCESS-" << endl;
+							system("pause");
+
+						}
+						else {
+							cout << "-PASSWORD WRONG-" << endl;
+							system("pause");
+
+						}
+
+					}
+
+					else if (n == '2') {
+						system("cls");
+						cout << "***************UPDATE PASSWORDN***************" << endl;
+						cout << "Enter Current Password: ";
+						cin >> in_pw;
+						in_pw_h = str_hash(in_pw);
+
+						if (in_pw_h == hash_val) {
+							new_pw = update_pw();
+							new_hash = str_hash(new_pw);
+							hash_val = new_hash;
+							updateFile(file_name, name, acNum, tel, new_hash, balance);
+							cout << "-UPDATE SUCCESS-" << endl;
+							system("pause");
+							break;
+						}
+						else {
+							cout << "-PASSWORD WRONG-" << endl;
+							system("pause");
+							break;
+						}
+
+					}
+
+					else if (n == '3') {
+						break;
+					}
+
+					else {
+						cout << "\a";
+					}
+				} while (n != '3');
 			}
 
 			else if (bankMenuOption == "7") {
-
 				cout << "Are You Sure To Logout?" << endl;
 				bool x = ynexit();
 
@@ -273,7 +384,7 @@ public:
 
 		double amount = 0;
 
-		cout << "Current Account Is : " << acNum << " and $" << balance << endl;
+		//cout << "Current Account Is : " << acNum << " and $" << balance << endl;
 		system("pause");
 
 		cout << "***************TRANSFER***************" << endl;
@@ -309,55 +420,6 @@ public:
 
 };
 
-/*class TransferAccount {
-private:
-	int trans_num;
-	int trans_tel;
-	string trans_name;
-	size_t trans_hash;
-	double trans_balance;
-
-public:
-	string getTransName() {
-		return trans_name;
-	}
-
-	void setTransName(string acName) {
-		trans_name = acName;
-	}
-
-	int getTransNum() {
-		return trans_num;
-	}
-
-	void setTransNum(int acNum) {
-		trans_num = acNum;
-	}
-
-	int getTransTel() {
-		return trans_tel;
-	}
-
-	void setTransTel(int tel) {
-		trans_tel = tel;
-	}
-
-	size_t getTransHash() {
-		return trans_hash;
-	}
-
-	void setTransHash(size_t pw) {
-		trans_hash = pw;
-	}
-
-	double getTransBalance() {
-		return trans_balance;
-	}
-
-	void setTransBalance(double bal) {
-		trans_balance = bal;
-	}
-};*/
 
 /*--------------------------------------main--------------------------------------*/
 
@@ -1074,132 +1136,6 @@ void updateFile(string file_name, string name, int num, int tel, size_t hpw, dou
 	}
 }
 
-/*bool transfer(string file_name) {
-	char choice;
-	cout << "***************TRANSFER***************" << endl;
-	cout << "Chose Either One Recipient Information" << endl;
-	cout << "(1) Account Number" << endl;
-	cout << "(2) Mobile Phone Number" << endl;
-	cout << "(3) Exit" << endl;
-	do {
-		cout << "Your Choice: ";
-		cin >> choice;
-		if (choice == '1') {
-			int ac;
-			system("cls");
-			cout << "***************TRANSFER***************" << endl;
-			cout << "Please Enter The Recipient Account Number: ";
-			cin >> ac;
-			if (transSearch(file_name, ac)) {
-				system("cls");
-				return 1;
-			}
-			else {
-				cout << "***No This Account***" << endl;
-				system("pause");
-				return 0;
-			}
-		}
-		else if (choice == '2') {
-			int tel;
-			int ac;
-			system("cls");
-			cout << "***************TRANSFER***************" << endl;
-			cout << "Please Enter The Recipient Mobile Phone Number: ";
-			cin >> tel;
-
-			srand(tel);
-			ac = (567000000 + rand() % 999999);
-
-			if (transSearch(file_name, ac)) {
-				system("cls");
-				return 1;
-			}
-			else {
-				cout << "***No This Account***" << endl;
-				system("pause");
-				return 0;
-			}
-
-		}
-		else if (choice == '3') {
-			break;
-		}
-	} while (choice != '3');
-}*/
-
-/*bool transSearch(string file_name, int ac) {
-	Account acc;
-
-	string num;
-	string tel;
-	string name;
-	string pw;
-	string balance;
-	bool check = false;
-	int size;
-	int acnum;
-	int phNum;
-	double bal;
-	size_t hpw;
-	streampos begin, end;
-	// open the file
-	ifstream inFile;
-
-	// file should be put in same folder as the source code file
-	inFile.open(file_name);
-	begin = inFile.tellg();
-	inFile.seekg(0, ios::end);
-	end = inFile.tellg();
-	size = end - begin;
-
-	inFile.seekg(0, ios::beg);
-	// repeat until end of file is reached
-	while (inFile.tellg() != size) {
-		// get each line from file and print
-		inFile.seekg(inFile.tellg());
-		getline(inFile, num, '\t');
-
-		inFile.seekg(inFile.tellg());
-		getline(inFile, name, '\t');
-
-		inFile.seekg(inFile.tellg());
-		getline(inFile, tel, '\t');
-
-		inFile.seekg(inFile.tellg());
-		getline(inFile, pw, '\t');
-		inFile.seekg(inFile.tellg());
-
-		getline(inFile, balance, '\n');
-		inFile.seekg(inFile.tellg());
-
-		stringstream s1(num);
-		s1 >> acnum;
-
-		stringstream s2(tel);
-		s2 >> phNum;
-
-		stringstream s3(pw);
-		s3 >> hpw;
-
-		stringstream s4(balance);
-		s4 >> bal;
-
-		if (ac == acnum) {
-			check = true;
-		}
-	}
-	// close the file
-	inFile.close();
-
-	if (check) {
-		return 1;
-	}
-	else {
-		return 0;
-	}
-}*/
-
 double retTrans(string file_name, int ac, int ac_num) {
 	Account acc;
 
@@ -1292,50 +1228,98 @@ double retTrans(string file_name, int ac, int ac_num) {
 	}
 }
 
-/*void transfer(string file_name) {
+void fixedDeposit(double p, double r, int t) {
+	double p_old = p;
+	double a;
+	double i;
+
+	r = r / 100;
 	system("cls");
-	Account ac;
-	TransferAccount tac;
+	cout << "***************FIXED DEPOSIT ENQUIRY***************" << endl;
+	cout << setw(15) << right << "Month" << setw(15) << right << "Interest" << setw(15) << right << "Amount" << endl;
+	for (int j = 1; j <= t; j++) {
 
-	double amount = 0;
-	double balance = ac.getBalance();
-	double t_balance = tac.getTransBalance();
-	int t_num = tac.getTransNum();
-	string t_name = tac.getTransName();
-	size_t t_hash = tac.getTransHash();
-	int t_tel = tac.getTransTel();
+		a = p * pow((1.0 + (r / 12.0)), j);
+		i = a - p_old;
+		p_old = a;
 
-	cout << "Current Account Is : " << ac.getAcNum() << " and $" << balance << endl;
-	system("pause");
-
-	cout << "***************TRANSFER***************" << endl;
-	cout << setw(30) << left << "Account Holder Name: " << t_name << endl;
-	cout << setw(30) << left << "Account Number: " << t_num << endl;
-	cout << setw(30) << left << "Enter Transfer Amount: ";
-	while (!(cin >> amount) || (amount < 0) || (amount > balance)) {
-		cout << endl;
-		cout << "-The Input Is Not A Number / Negative Amount / Over Your Balance-" << endl;
-		system("pause");
-		system("cls");
-		cout << "***************TRANSFER***************" << endl;
-		cout << setw(30) << left << "Account Holder Name: " << t_name << endl;
-		cout << setw(30) << left << "Account Number: " << t_num << endl;
-		cout << setw(30) << left << "Enter Transfer Amount: ";
-		cin.clear(); //Reset the input error status to no error
-		cin.ignore(256, '\n'); //Discard the content in the input sequence
+		cout << setw(15) << right << j;
+		cout << setw(15) << right << setprecision(2) << fixed << i;
+		cout << setw(15) << right << setprecision(2) << fixed << a << endl;
 	}
-
-	balance -= amount;
-	ac.setBalance(balance);
-
-	t_balance += amount;
-
-	cout << "-SUCCESS-" << endl;
-
-	updateFile(file_name, t_name, t_num, t_tel, t_hash, t_balance);
-
 	system("pause");
+}
 
-	return;
-}*/
+int update_tel() {
+	int phoneNumber = 0, phoneNumber_confirm = phoneNumber;
+	do {
+		cin.clear();
+		cin.ignore(256, '\n');
+		do {
 
+			if (phoneNumber_confirm != phoneNumber) {
+				cout << endl;
+				cout << "-Not Match, Please Enter Again-" << endl;
+				cout << endl;
+			}
+
+			cout << setw(30) << left << "NEW Mobile Phone Number: ";
+			while (!(cin >> phoneNumber) || phoneNumber <= 0) {
+				cout << endl;
+				cout << "-Not Match The Phone Number Requirement-" << endl;
+				cout << "-Please Enter Again-" << endl;
+				cout << endl;
+				cout << setw(30) << left << "NEW Mobile Phone Number: ";
+				cin.clear(); //Reset the input error status to no error
+				cin.ignore(256, '\n'); //Discard the content in the input sequence
+			}
+
+			cout << setw(30) << left << "Confirm NEW Mobile Phone Number: ";
+			while (!(cin >> phoneNumber_confirm) || phoneNumber <= 0) {
+				cout << endl;
+				cout << "-Not Match The Phone Number Requirement-" << endl;
+				cout << "-Please Enter Again-" << endl;
+				cout << endl;
+				cout << setw(30) << left << "Confirm NEW Mobile Phone Number: ";
+				cin.clear(); //Reset the input error status to no error
+				cin.ignore(256, '\n');//Discard the content in the input sequence
+			}
+		}
+		//while loop if phone number and the confirm is not the same
+		while (phoneNumber_confirm != phoneNumber);
+
+	}
+	//do-while loop for checking the digit of the phone number
+	while (!checkPhone(phoneNumber));
+
+	cout << endl;
+
+	return phoneNumber;
+}
+
+string update_pw() {
+
+	string accountPassword, accountPassword_confirm;
+	//do-while loop for checking the password requirement
+	do {
+		cin.clear();
+		cin.ignore(256, '\n');
+		//do-while loop for  confirm the password
+		do {
+			if (accountPassword_confirm != accountPassword) {
+				cout << endl;
+				cout << "-Not Match, Please Enter Again-" << endl;
+				cout << endl;
+			}
+			cout << setw(30) << left << "Enter NEW Password: ";
+			getline(cin, accountPassword);
+
+			cout << setw(30) << left << "Confirm NEW Password: ";
+			getline(cin, accountPassword_confirm);
+		} while (accountPassword_confirm != accountPassword);
+	} while (!checkPassword(accountPassword));
+
+	cout << endl;
+
+	return accountPassword;
+}

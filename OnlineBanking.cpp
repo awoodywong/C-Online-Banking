@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 #include <iomanip>
 #include <cmath>
 #include <fstream>
@@ -8,6 +8,7 @@
 #include <string>
 #include <sstream>
 #include <cstring>
+#include <ctime>
 
 using namespace std;
 
@@ -29,6 +30,7 @@ double withdraw(double);
 bool ynexit();
 void login(string, int, string);
 bool searchPhone(string, int);
+bool searchNum(string, int);
 void updateFile(string, string, int, int, size_t, double);
 double retTrans_num(string, int, int);
 double retTrans_tel(string, int, int);
@@ -154,7 +156,7 @@ public:
 	void setTransBalance(double bal) {
 		trans_balance = bal;
 	}
-	
+
 	double transfer(string file_name);
 
 	void bankMenu(string file_name);
@@ -193,20 +195,19 @@ double Account::transfer(string file_name) {
 		cin.ignore(256, '\n'); //Discard the content in the input sequence
 	}
 	if (t.stop() > 15) {
-		cout << "-TIMEOUT-" << endl;
-		cout << "Return To Main Menu" << endl;
+		cout << "You are logged out as the system is idle for 15 seconds. Please login again." << endl;
 		system("pause");
 		return 0;
 	}
 	else {
 		t.start();
 		if ((amount > balance)) {
-		cout << "-The Amount Is Over Your Balance-" << endl;
-		system("pause");
-		return 0;
+			cout << "-The Amount Is Over Your Balance-" << endl;
+			system("pause");
+			return 0;
 		}
 	}
-	
+
 	balance = (balance - amount); //calculate the balance
 	setBalance(balance); //set the balance
 
@@ -250,9 +251,8 @@ void Account::bankMenu(string file_name) {
 		//check balance function
 		if (bankMenuOption == "1") {
 			if (t.stop() > 15) {
-				cout << "-TIMEOUT-" << endl;
-				cout << "Return To Main Menu" << endl;
-				system("pause");
+				cout << "You are logged out as the system is idle for 15 seconds. Please login again." << endl;
+                system("pause");
 				updateFile(file_name, name, acNum, tel, hash_val, balance); //updat the account record when exit
 				return;
 			}
@@ -269,9 +269,8 @@ void Account::bankMenu(string file_name) {
 			cout << setw(30) << left << "Account Balance:" << setprecision(2) << fixed << balance << " HKD" << endl;
 			system("pause");
 			if (t.stop() > 15) {
-				cout << "-TIMEOUT-" << endl;
-				cout << "Return To Main Menu" << endl;
-				system("pause");
+				cout << "You are logged out as the system is idle for 15 seconds. Please login again." << endl;
+                system("pause");
 				updateFile(file_name, name, acNum, tel, hash_val, balance); //updat the account record when exit
 				return;
 			}
@@ -283,9 +282,8 @@ void Account::bankMenu(string file_name) {
 		//deposit function
 		else if (bankMenuOption == "2") {
 			if (t.stop() > 15) {
-				cout << "-TIMEOUT-" << endl;
-				cout << "Return To Main Menu" << endl;
-				system("pause");
+				cout << "You are logged out as the system is idle for 15 seconds. Please login again." << endl;
+                system("pause");
 				updateFile(file_name, name, acNum, tel, hash_val, balance); //updat the account record when exit
 				return;
 			}
@@ -298,9 +296,6 @@ void Account::bankMenu(string file_name) {
 			deposit_amount = deposit(); //call the daposit function
 			balance += deposit_amount; //modify the value of class variable
 			if (t.stop() > 15) {
-				cout << "-TIMEOUT-" << endl;
-				cout << "Return To Main Menu" << endl;
-				system("pause");
 				updateFile(file_name, name, acNum, tel, hash_val, balance); //updat the account record when exit
 				return;
 			}
@@ -316,9 +311,8 @@ void Account::bankMenu(string file_name) {
 		//withdraw function
 		else if (bankMenuOption == "3") {
 			if (t.stop() > 15) {
-				cout << "-TIMEOUT-" << endl;
-				cout << "Return To Main Menu" << endl;
-				system("pause");
+				cout << "You are logged out as the system is idle for 15 seconds. Please login again." << endl;
+                system("pause");
 				updateFile(file_name, name, acNum, tel, hash_val, balance); //updat the account record when exit
 				return;
 			}
@@ -332,9 +326,6 @@ void Account::bankMenu(string file_name) {
 			balance -= withdraw_amount; //modify the value of class variable
 			setBalance(balance);
 			if (t.stop() > 15) {
-				cout << "-TIMEOUT-" << endl;
-				cout << "Return To Main Menu" << endl;
-				system("pause");
 				updateFile(file_name, name, acNum, tel, hash_val, balance); //updat the account record when exit
 				return;
 			}
@@ -349,9 +340,8 @@ void Account::bankMenu(string file_name) {
 		//transfer function
 		else if (bankMenuOption == "4") {
 			if (t.stop() > 15) {
-				cout << "-TIMEOUT-" << endl;
-				cout << "Return To Main Menu" << endl;
-				system("pause");
+				cout << "You are logged out as the system is idle for 15 seconds. Please login again." << endl;
+                system("pause");
 				updateFile(file_name, name, acNum, tel, hash_val, balance); //updat the account record when exit
 				return;
 			}
@@ -383,9 +373,8 @@ void Account::bankMenu(string file_name) {
 				//using account number to transfer
 				if (choice == '1') {
 					if (t.stop() > 15) {
-						cout << "-TIMEOUT-" << endl;
-						cout << "Return To Main Menu" << endl;
-						system("pause");
+						cout << "You are logged out as the system is idle for 15 seconds. Please login again." << endl;
+                        system("pause");
 						updateFile(file_name, name, acNum, tel, hash_val, balance); //updat the account record when exit
 						return;
 					}
@@ -396,9 +385,8 @@ void Account::bankMenu(string file_name) {
 						cout << "Recipient Account Number: ";
 						cin >> num; //input the recipient account number
 						if (t.stop() > 15) {
-							cout << "-TIMEOUT-" << endl;
-							cout << "Return To Main Menu" << endl;
-							system("pause");
+							cout << "You are logged out as the system is idle for 15 seconds. Please login again." << endl;
+                            system("pause");
 							updateFile(file_name, name, acNum, tel, hash_val, balance); //updat the account record when exit
 							return;
 						}
@@ -424,14 +412,13 @@ void Account::bankMenu(string file_name) {
 						}
 					}
 				}
-					
+
 
 				//using mobile phone to transfer
 				else if (choice == '2') {
 					if (t.stop() > 15) {
-						cout << "-TIMEOUT-" << endl;
-						cout << "Return To Main Menu" << endl;
-						system("pause");
+						cout << "You are logged out as the system is idle for 15 seconds. Please login again." << endl;
+                        system("pause");
 						updateFile(file_name, name, acNum, tel, hash_val, balance); //updat the account record when exit
 						return;
 					}
@@ -442,9 +429,8 @@ void Account::bankMenu(string file_name) {
 						cout << "Mobile Phone Number: ";
 						cin >> phNum; //input the recipient mobile phone number
 						if (t.stop() > 15) {
-							cout << "-TIMEOUT-" << endl;
-							cout << "Return To Main Menu" << endl;
-							system("pause");
+							cout << "You are logged out as the system is idle for 15 seconds. Please login again." << endl;
+                            system("pause");
 							updateFile(file_name, name, acNum, tel, hash_val, balance); //updat the account record when exit
 							return;
 						}
@@ -464,20 +450,19 @@ void Account::bankMenu(string file_name) {
 							else {
 								t.start();
 								balance -= amount; //modify the value of class variable
-	
+
 								break; //return to bank menu
-								}
 							}
 						}
 					}
-						
+				}
+
 
 				//exit the transfer function
 				else if (choice == '3') {
 					if (t.stop() > 15) {
-						cout << "-TIMEOUT-" << endl;
-						cout << "Return To Main Menu" << endl;
-						system("pause");
+						cout << "You are logged out as the system is idle for 15 seconds. Please login again." << endl;
+                        system("pause");
 						updateFile(file_name, name, acNum, tel, hash_val, balance); //updat the account record when exit
 						return;
 					}
@@ -485,15 +470,14 @@ void Account::bankMenu(string file_name) {
 						t.start();
 						break;
 					}
-					
+
 				}
 
 				//input other choice
 				else {
 					if (t.stop() > 15) {
-						cout << "-TIMEOUT-" << endl;
-						cout << "Return To Main Menu" << endl;
-						system("pause");
+						cout << "You are logged out as the system is idle for 15 seconds. Please login again." << endl;
+                        system("pause");
 						updateFile(file_name, name, acNum, tel, hash_val, balance); //updat the account record when exit
 						return;
 					}
@@ -507,16 +491,15 @@ void Account::bankMenu(string file_name) {
 
 		//fixed deposit enquiry function
 		else if (bankMenuOption == "5") {
-		if (t.stop() > 15) {
-			cout << "-TIMEOUT-" << endl;
-			cout << "Return To Main Menu" << endl;
-			system("pause");
-			updateFile(file_name, name, acNum, tel, hash_val, balance); //updat the account record when exit
-			return;
-		}
-		else {
-			t.start();
-		}
+			if (t.stop() > 15) {
+				cout << "You are logged out as the system is idle for 15 seconds. Please login again." << endl;
+                system("pause");
+				updateFile(file_name, name, acNum, tel, hash_val, balance); //updat the account record when exit
+				return;
+			}
+			else {
+				t.start();
+			}
 			t.start();
 			double p, r; //p for principal, r for the interest rate per year
 			int z; //z for the period
@@ -536,9 +519,8 @@ void Account::bankMenu(string file_name) {
 				cin.ignore(256, '\n'); //Discard the content in the input sequence
 			}
 			if (t.stop() > 15) {
-				cout << "-TIMEOUT-" << endl;
-				cout << "Return To Main Menu" << endl;
-				system("pause");
+				cout << "You are logged out as the system is idle for 15 seconds. Please login again." << endl;
+                system("pause");
 				updateFile(file_name, name, acNum, tel, hash_val, balance); //updat the account record when exit
 				return;
 			}
@@ -557,11 +539,10 @@ void Account::bankMenu(string file_name) {
 				cin.ignore(256, '\n'); //Discard the content in the input sequence
 			}
 			if (t.stop() > 15) {
-				cout << "-TIMEOUT-" << endl;
-				cout << "Return To Main Menu" << endl;
-				system("pause");
+				cout << "You are logged out as the system is idle for 15 seconds. Please login again." << endl;
+                system("pause");
 				updateFile(file_name, name, acNum, tel, hash_val, balance); //updat the account record when exit
-				return ;
+				return;
 			}
 			else {
 				t.start();
@@ -578,21 +559,19 @@ void Account::bankMenu(string file_name) {
 				cin.ignore(256, '\n'); //Discard the content in the input sequence
 			}
 			if (t.stop() > 15) {
-				cout << "-TIMEOUT-" << endl;
-				cout << "Return To Main Menu" << endl;
-				system("pause");
+				cout << "You are logged out as the system is idle for 15 seconds. Please login again." << endl;
+                system("pause");
 				updateFile(file_name, name, acNum, tel, hash_val, balance); //updat the account record when exit
-				return ;
+				return;
 			}
 			else {
 				t.start();
 				fixedDeposit(p, r, z); //call the fixed deposit function
 				if (t.stop() > 15) {
-					cout << "-TIMEOUT-" << endl;
-					cout << "Return To Main Menu" << endl;
-					system("pause");
+					cout << "You are logged out as the system is idle for 15 seconds. Please login again." << endl;
+                    system("pause");
 					updateFile(file_name, name, acNum, tel, hash_val, balance); //updat the account record when exit
-					return ;
+					return;
 				}
 				else {
 					t.start();
@@ -602,16 +581,15 @@ void Account::bankMenu(string file_name) {
 
 		//update account information function
 		else if (bankMenuOption == "6") {
-		if (t.stop() > 15) {
-			cout << "-TIMEOUT-" << endl;
-			cout << "Return To Main Menu" << endl;
-			system("pause");
-			updateFile(file_name, name, acNum, tel, hash_val, balance); //updat the account record when exit
-			return;
-		}
-		else {
-			t.start();
-		}
+			if (t.stop() > 15) {
+				cout << "You are logged out as the system is idle for 15 seconds. Please login again." << endl;
+                system("pause");
+				updateFile(file_name, name, acNum, tel, hash_val, balance); //updat the account record when exit
+				return;
+			}
+			else {
+				t.start();
+			}
 			t.start();
 			system("cls");
 			hash<string> str_hash; //hash value function
@@ -634,11 +612,10 @@ void Account::bankMenu(string file_name) {
 			do {
 				cin >> n; //input the user choice
 				if (t.stop() > 15) {
-					cout << "-TIMEOUT-" << endl;
-					cout << "Return To Main Menu" << endl;
-					system("pause");
+					cout << "You are logged out as the system is idle for 15 seconds. Please login again." << endl;
+                    system("pause");
 					updateFile(file_name, name, acNum, tel, hash_val, balance); //updat the account record when exit
-					return ;
+					return;
 				}
 				else {
 					t.start();
@@ -657,11 +634,10 @@ void Account::bankMenu(string file_name) {
 						cout << "Enter Your Account Password: ";
 						cin >> in_pw; //confirm the account password
 						if (t.stop() > 15) {
-							cout << "-TIMEOUT-" << endl;
-							cout << "Return To Main Menu" << endl;
-							system("pause");
+							cout << "You are logged out as the system is idle for 15 seconds. Please login again." << endl;
+                            system("pause");
 							updateFile(file_name, name, acNum, tel, hash_val, balance); //updat the account record when exit
-							return ;
+							return;
 						}
 						else {
 							t.start();
@@ -677,13 +653,13 @@ void Account::bankMenu(string file_name) {
 							break; //return to bank menu
 
 						}
-	
+
 						//if the comfirm was wrong
 						else {
 							cout << "-PASSWORD WRONG-" << endl; //meaningful message display
 							system("pause");
 							break; //return to bank menu
-	
+
 						}
 
 					}
@@ -695,23 +671,22 @@ void Account::bankMenu(string file_name) {
 						cout << "Enter Current Password: ";
 						cin >> in_pw; //input the account current password
 						if (t.stop() > 15) {
-							cout << "-TIMEOUT-" << endl;
-							cout << "Return To Main Menu" << endl;
-							system("pause");
+							cout << "You are logged out as the system is idle for 15 seconds. Please login again." << endl;
+                            system("pause");
 							updateFile(file_name, name, acNum, tel, hash_val, balance); //updat the account record when exit
-							return ;
+							return;
 						}
 						else {
 							t.start();
 						}
 						in_pw_h = str_hash(in_pw); //hash the input of current password for compare
-	
+
 						//compare the input password and the account password (class variable)
 						if (in_pw_h == hash_val) {
 							new_pw = update_pw(); //input and checking new password, and return the new password into new_pw variable
 							if (t.stop() > 30) {
 								updateFile(file_name, name, acNum, tel, hash_val, balance); //updat the account record when exit
-								return ;
+								return;
 							}
 							else {
 								t.start();
@@ -738,18 +713,17 @@ void Account::bankMenu(string file_name) {
 
 					//input other choice
 					else {
-					if (t.stop() > 15) {
-						cout << "-TIMEOUT-" << endl;
-						cout << "Return To Main Menu" << endl;
-						system("pause");
-						updateFile(file_name, name, acNum, tel, hash_val, balance); //updat the account record when exit
-						return ;
-					}
-					else {
-						t.start();
-						cout << "\a";
-					}
-						
+						if (t.stop() > 15) {
+							cout << "You are logged out as the system is idle for 15 seconds. Please login again." << endl;
+                            system("pause");
+							updateFile(file_name, name, acNum, tel, hash_val, balance); //updat the account record when exit
+							return;
+						}
+						else {
+							t.start();
+							cout << "\a";
+						}
+
 					}
 				}
 			} while (n != '3');
@@ -757,16 +731,15 @@ void Account::bankMenu(string file_name) {
 
 		//logout function
 		else if (bankMenuOption == "7") {
-		if (t.stop() > 15) {
-			cout << "-TIMEOUT-" << endl;
-			cout << "Return To Main Menu" << endl;
-			system("pause");
-			updateFile(file_name, name, acNum, tel, hash_val, balance); //updat the account record when exit
-			return;
-		}
-		else {
-			t.start();
-		}
+			if (t.stop() > 15) {
+				cout << "You are logged out as the system is idle for 15 seconds. Please login again." << endl;
+                system("pause");
+				updateFile(file_name, name, acNum, tel, hash_val, balance); //updat the account record when exit
+				return;
+			}
+			else {
+				t.start();
+			}
 			cout << "Are You Sure To Logout?" << endl;
 			bool x = ynexit(); //call the yes no exit function
 
@@ -795,10 +768,10 @@ void Account::bankMenu(string file_name) {
 
 int main() {
 	string file_name; //the file name variable
-	cout << "Welcome Message designed by WONG KONG LUN (ME ONLY)" << endl; //welcome message
+	cout << "Welcome Message designed by Wong Kong Lun" << endl; //welcome message
 	cout << "Please input the file name of the data file: "; //prompt user input the file name i.e. account.dat
 	cin >> file_name;
-	
+
 	menu(file_name); //call the main menu function
 
 	return 0;
@@ -811,19 +784,20 @@ void credits() {
 	system("cls");
 	cout << left << setw(20) << "Name" << setw(15) << "ID" << setw(10) << "Class" << setw(20) << "Tutorial Group" << endl;
 	cout << "-----------------------------------------------------------" << endl;
-	cout << left << setw(20) << "Wong Kong Lun" << setw(15) << "18039547A" << setw(10) << "class" << setw(20) << "tut class" << endl;
-	cout << left << setw(20) << "name" << setw(15) << "student ID" << setw(10) << "class" << setw(20) << "tut class" << endl;
-	cout << left << setw(20) << "name" << setw(15) << "student ID" << setw(10) << "class" << setw(20) << "tut class" << endl;
-	cout << left << setw(20) << "name" << setw(15) << "student ID" << setw(10) << "class" << setw(20) << "tut class" << endl;
-	cout << left << setw(20) << "name" << setw(15) << "student ID" << setw(10) << "class" << setw(20) << "tut class" << endl;
+	cout << left << setw(20) << "Wong Kong Lun" << setw(15) << "18039547A" << setw(10) << "101" << setw(20) << "101C" << endl;
+	cout << left << setw(20) << "Lam Chun  Choi" << setw(15) << "18078757A" << setw(10) << "101" << setw(20) << "101C" << endl;
+	cout << left << setw(20) << "Cheng Man Kit" << setw(15) << "18053542A" << setw(10) << "101" << setw(20) << "101C" << endl;
+	cout << left << setw(20) << "Lam Wingpan" << setw(15) << "18046526A" << setw(10) << "101" << setw(20) << "101B" << endl;
+	cout << left << setw(20) << "Hui Wing Yau" << setw(15) << "18011599A" << setw(10) << "101" << setw(20) << "101D" << endl;
+	cout << left << setw(20) << "Tsui Ka Lok" << setw(15) << "18054090A" << setw(10) << "101" << setw(20) << "101C" << endl;
 }
 
 //menu
 void menu(string file_name) {
 	Time t;
-	
+
 	string menuOption;
-	
+
 	//do-while loop for the main menu
 	do {
 		system("cls");
@@ -832,7 +806,7 @@ void menu(string file_name) {
 		cout << "[2] Login" << endl;
 		cout << "[3] List All Account" << endl;
 		cout << "[4] Credits" << endl;
-		cout << "[5] Exist" << endl;
+		cout << "[5] Exit" << endl;
 		cout << "*****************" << endl;
 		cout << "Option (1 - 5): ";
 		cin >> menuOption;
@@ -868,26 +842,24 @@ void menu(string file_name) {
 				cin.ignore(256, '\n'); //Discard the content in the input sequence
 			}
 			if (t.stop() > 15) {
-				cout << "-TIMEOUT-" << endl;
-				cout << "Return To Main Menu" << endl;
-				system("pause");
+				cout << "You are logged out as the system is idle for 15 seconds. Please login again." << endl;
+                system("pause");
 			}
 			else {
 				t.start();
 				cout << setw(30) << left << "Account Password: ";
 				cin >> ac_pw; //account password input
 				if (t.stop() > 15) {
-					cout << "-TIMEOUT-" << endl;
-					cout << "Return To Main Menu" << endl;
-					system("pause");
+					cout << "You are logged out as the system is idle for 15 seconds. Please login again." << endl;
+                    system("pause");
 				}
 				else {
 					t.start();
 					login(file_name, ac_num, ac_pw); //call the login function
 				}
 			}
-			
-			
+
+
 		}
 
 		//list all account function
@@ -935,7 +907,7 @@ void readFile(string file_name) {
 	char temp_line[100];
 	int counter = 0;
 	int smallestIndex, temp;
-	
+
 	// open the file
 	ifstream inFile;
 
@@ -943,34 +915,34 @@ void readFile(string file_name) {
 	inFile.open(file_name);
 
 	// repeat until end of file is reached
-	 while (!inFile.eof()){
-		 
+	while (!inFile.eof()) {
+
 		inFile.getline(record, 100, '\n'); //get the record from .dat file
 		strcpy(line[counter], record); //copy the record from [record] to [line] array(2D)
 		counter++; //count how many record
-	 }
+	}
 
 	// close the file
 	inFile.close();
 
 	//selection sorting process (ascending order)
-	 for (int j = 0; j < counter; j++) {
-		 smallestIndex = j;
-		 for (int pos = j + 1; pos < counter; pos++) 
-			 if (strncmp(line[smallestIndex], line[pos], 8) > 0) //compare the account number by strncmp() function
-				 smallestIndex = pos;
-			 
-		 strcpy(temp_line, line[smallestIndex]);
-		 strcpy(line[smallestIndex], line[j]);
-		 strcpy(line[j], temp_line);
-	 }
+	for (int j = 0; j < counter; j++) {
+		smallestIndex = j;
+		for (int pos = j + 1; pos < counter; pos++)
+			if (strncmp(line[smallestIndex], line[pos], 8) > 0) //compare the account number by strncmp() function
+				smallestIndex = pos;
 
-	 //display the record in ascending order of account number
-	 cout << setw(16) << left << "AC NUMBER" << setw(16) << left << "HOLDER NAME" << setw(16) << left << "TEL" << setw(16) << left << "HASHED PW" << setw(10) << left << "BALANCE" << endl;
-	 cout << "------------------------------------------------------------------------------------------------------------" << endl;
-	 for (int i = 0; i < counter; i++) {
-		 cout << line[i] << endl;
-	 }
+		strcpy(temp_line, line[smallestIndex]);
+		strcpy(line[smallestIndex], line[j]);
+		strcpy(line[j], temp_line);
+	}
+
+	//display the record in ascending order of account number
+	cout << setw(16) << left << "AC NUMBER" << setw(16) << left << "HOLDER NAME" << setw(16) << left << "TEL" << setw(16) << left << "HASHED PW" << setw(10) << left << "BALANCE" << endl;
+	cout << "------------------------------------------------------------------------------------------------------------" << endl;
+	for (int i = 0; i < counter; i++) {
+		cout << line[i] << endl;
+	}
 
 }
 
@@ -1040,6 +1012,11 @@ void writeFile_openAC(string file_name) {
 		t.start();
 	}
 
+	//prevent have the same account number, because account number is generate by tel
+	while (searchNum(file_name, acc_no)) {
+		acc_no++;
+	}
+
 	// ensure floating point is written in 2 d.p.
 	outFile.setf(ios::fixed, ios::floatfield);
 	outFile.precision(2);
@@ -1095,9 +1072,8 @@ string acName_input() {
 			cout << setw(40) << left << "Enter The Account Holder Name: ";
 			getline(cin, accountName);
 			if (t.stop() > 15) {
-				cout << "-TIMEOUT-" << endl;
-				cout << "Return To Main Menu" << endl;
-				system("pause");
+				cout << "You are logged out as the system is idle for 15 seconds. Please login again." << endl;
+                system("pause");
 				return "\0";
 			}
 			else {
@@ -1107,9 +1083,8 @@ string acName_input() {
 			cout << setw(40) << left << "Confirm The Account Holder Name: ";
 			getline(cin, accountName_confirm);
 			if (t.stop() > 15) {
-				cout << "-TIMEOUT-" << endl;
-				cout << "Return To Main Menu" << endl;
-				system("pause");
+				cout << "You are logged out as the system is idle for 15 seconds. Please login again." << endl;
+                system("pause");
 				return "\0";
 			}
 			else {
@@ -1153,15 +1128,14 @@ int phNum_input() {
 				cin.ignore(256, '\n'); //Discard the content in the input sequence
 			}
 			if (t.stop() > 15) {
-				cout << "-TIMEOUT-" << endl;
-				cout << "Return To Main Menu" << endl;
-				system("pause");
+				cout << "You are logged out as the system is idle for 15 seconds. Please login again." << endl;
+                system("pause");
 				return 0;
 			}
 			else {
 				t.start();
 			}
-		
+
 			cout << setw(30) << left << "Confirm Your Phone Number: ";
 			while (!(cin >> phoneNumber_confirm) || phoneNumber <= 0) {
 				cout << endl;
@@ -1173,9 +1147,8 @@ int phNum_input() {
 				cin.ignore(256, '\n');//Discard the content in the input sequence
 			}
 			if (t.stop() > 15) {
-				cout << "-TIMEOUT-" << endl;
-				cout << "Return To Main Menu" << endl;
-				system("pause");
+				cout << "You are logged out as the system is idle for 15 seconds. Please login again." << endl;
+                system("pause");
 				return 0;
 			}
 			else {
@@ -1214,9 +1187,8 @@ string acPw_input() {
 			cout << setw(30) << left << "Enter Your Account Password: ";
 			getline(cin, accountPassword);
 			if (t.stop() > 15) {
-				cout << "-TIMEOUT-" << endl;
-				cout << "Return To Main Menu" << endl;
-				system("pause");
+				cout << "You are logged out as the system is idle for 15 seconds. Please login again." << endl;
+                system("pause");
 				return "\0";
 			}
 			else {
@@ -1226,9 +1198,8 @@ string acPw_input() {
 			cout << setw(30) << left << "Confirm Your Account Password: ";
 			getline(cin, accountPassword_confirm);
 			if (t.stop() > 15) {
-				cout << "-TIMEOUT-" << endl;
-				cout << "Return To Main Menu" << endl;
-				system("pause");
+				cout << "You are logged out as the system is idle for 15 seconds. Please login again." << endl;
+                system("pause");
 				return "\0";
 			}
 			else {
@@ -1252,9 +1223,8 @@ double balance_input() {
 		cout << "Initial Amount to Deposit (At Least $100) : $";
 		cin >> bal;
 		if (t.stop() > 15) {
-			cout << "-TIMEOUT-" << endl;
-			cout << "Return To Main Menu" << endl;
-			system("pause");
+			cout << "You are logged out as the system is idle for 15 seconds. Please login again." << endl;
+            system("pause");
 			return 0;
 		}
 		else {
@@ -1402,9 +1372,8 @@ double deposit() {
 		cin.ignore(256, '\n'); //Discard the content in the input sequence
 	}
 	if (t.stop() > 15) {
-		cout << "-TIMEOUT-" << endl;
-		cout << "Return To Main Menu" << endl;
-		system("pause");
+		cout << "You are logged out as the system is idle for 15 seconds. Please login again." << endl;
+        system("pause");
 		return 0;
 	}
 	else {
@@ -1431,9 +1400,8 @@ double withdraw(double balance) {
 		cin.ignore(256, '\n'); //Discard the content in the input sequence
 	}
 	if (t.stop() > 15) {
-		cout << "-TIMEOUT-" << endl;
-		cout << "Return To Main Menu" << endl;
-		system("pause");
+		cout << "You are logged out as the system is idle for 15 seconds. Please login again." << endl;
+        system("pause");
 		return 0;
 	}
 	else {
@@ -1498,20 +1466,20 @@ void login(string file_name, int ac_num, string ac_pw) {
 
 	// get the file record until the end of the size
 	while (inFile.tellg() != size) {
-		
+
 		//get the name, num, tel, pw, balance separately, in string data type
 		inFile.seekg(inFile.tellg());
 		getline(inFile, num, '\t');
 
 		inFile.seekg(inFile.tellg());
 		getline(inFile, name, '\t');
-		
+
 		inFile.seekg(inFile.tellg());
 		getline(inFile, tel, '\t');
 
 		inFile.seekg(inFile.tellg());
 		getline(inFile, pw, '\t');
-		
+
 		inFile.seekg(inFile.tellg());
 		getline(inFile, balance, '\n');
 
@@ -1539,7 +1507,7 @@ void login(string file_name, int ac_num, string ac_pw) {
 			ac.setTel(phNum);
 			ac.setBalance(bal);
 			ac.setHashPW(hpw);
-			
+
 			check = true; //the check boolean to be true, that mean found the account
 		}
 
@@ -1549,7 +1517,7 @@ void login(string file_name, int ac_num, string ac_pw) {
 	// close the file
 	inFile.close();
 
-	
+
 	if (check) {
 		ac.bankMenu(file_name); //go to the bank menu if found the account
 	}
@@ -1576,6 +1544,7 @@ bool searchPhone(string file_name, int tel_num) {
 	size_t hpw;
 	streampos begin, end;
 
+
 	// open the file
 	ifstream inFile;
 
@@ -1587,9 +1556,9 @@ bool searchPhone(string file_name, int tel_num) {
 	size = end - begin;
 
 	inFile.seekg(0, ios::beg);
-	
+
 	while (inFile.tellg() != size) {
-		
+
 		inFile.seekg(inFile.tellg());
 		getline(inFile, num, '\t');
 
@@ -1620,7 +1589,7 @@ bool searchPhone(string file_name, int tel_num) {
 
 		//if found the tel
 		if (tel_num == phNum) {
-			
+
 			inFile.close(); // close the file
 			return 0;
 		}
@@ -1631,6 +1600,77 @@ bool searchPhone(string file_name, int tel_num) {
 
 	//if not found
 	return 1;
+}
+
+//searching the account number
+bool searchNum(string file_name, int ACnum) {
+	string num;
+	string tel;
+	string name;
+	string pw;
+	string balance;
+	int size;
+	int acnum;
+	int phNum;
+	double bal;
+	size_t hpw;
+	streampos begin, end;
+
+	// open the file
+	ifstream inFile;
+
+	// file should be put in same folder as the source code file
+	inFile.open(file_name);
+	begin = inFile.tellg();
+	inFile.seekg(0, ios::end);
+	end = inFile.tellg();
+	size = end - begin;
+
+	inFile.seekg(0, ios::beg);
+
+	while (inFile.tellg() != size) {
+
+		inFile.seekg(inFile.tellg());
+		getline(inFile, num, '\t');
+
+		inFile.seekg(inFile.tellg());
+		getline(inFile, name, '\t');
+
+		inFile.seekg(inFile.tellg());
+		getline(inFile, tel, '\t');
+
+		inFile.seekg(inFile.tellg());
+		getline(inFile, pw, '\t');
+		inFile.seekg(inFile.tellg());
+
+		getline(inFile, balance, '\n');
+		inFile.seekg(inFile.tellg());
+
+		stringstream s1(num);
+		s1 >> acnum;
+
+		stringstream s2(tel);
+		s2 >> phNum;
+
+		stringstream s3(pw);
+		s3 >> hpw;
+
+		stringstream s4(balance);
+		s4 >> bal;
+
+		//if found the tel
+		if (ACnum == acnum) {
+
+			inFile.close(); // close the file
+			return 1;
+		}
+	}
+
+	// close the file
+	inFile.close();
+
+	//if not found
+	return 0;
 }
 
 //update the file record
@@ -1683,14 +1723,14 @@ void updateFile(string file_name, string name, int num, int tel, size_t hpw, dou
 		if (ACnum == numSearch) {
 			recno = counter;
 		}
-		
+
 		counter++; //calculate the line number
 	}
 
 	file2.close();
 
 	if (found == true) {
-		
+
 		lineArr[recno] = ACnum + "\t" + ACname + "\t" + ACtel + "\t" + ACpw + "\t" + ACbalance; //add the new account data into one array
 		ofstream myUpdateFile(file_name); //open file
 
@@ -1731,7 +1771,7 @@ double retTrans_num(string file_name, int ac, int ac_num) {
 	inFile.seekg(0, ios::beg);
 	// repeat until end of file is reached
 	while (inFile.tellg() != size) {
-		
+
 		inFile.seekg(inFile.tellg());
 		getline(inFile, num, '\t');
 
@@ -1917,16 +1957,15 @@ void fixedDeposit(double p, double r, int t) {
 		cout << setw(15) << right << setprecision(2) << fixed << a << endl;
 	}
 	if (time.stop() > 15) {
-		cout << "-TIMEOUT-" << endl;
-		cout << "Return To Main Menu" << endl;
-		system("pause");
-		return ;
+		cout << "You are logged out as the system is idle for 15 seconds. Please login again." << endl;
+        system("pause");
+		return;
 	}
 	else {
 		time.start();
 		system("pause");
 	}
-	
+
 }
 
 //update the account information for mobile phone number
@@ -1958,9 +1997,8 @@ int update_tel() {
 				cin.ignore(256, '\n'); //Discard the content in the input sequence
 			}
 			if (t.stop() > 15) {
-				cout << "-TIMEOUT-" << endl;
-				cout << "Return To Main Menu" << endl;
-				system("pause");
+				cout << "You are logged out as the system is idle for 15 seconds. Please login again." << endl;
+                system("pause");
 				return 0;
 			}
 			else {
@@ -1978,9 +2016,8 @@ int update_tel() {
 				cin.ignore(256, '\n');//Discard the content in the input sequence
 			}
 			if (t.stop() > 15) {
-				cout << "-TIMEOUT-" << endl;
-				cout << "Return To Main Menu" << endl;
-				system("pause");
+				cout << "You are logged out as the system is idle for 15 seconds. Please login again." << endl;
+                system("pause");
 				return 0;
 			}
 			else {
@@ -2018,9 +2055,8 @@ string update_pw() {
 			cout << setw(30) << left << "Enter NEW Password: ";
 			getline(cin, accountPassword);
 			if (t.stop() > 15) {
-				cout << "-TIMEOUT-" << endl;
-				cout << "Return To Main Menu" << endl;
-				system("pause");
+				cout << "You are logged out as the system is idle for 15 seconds. Please login again." << endl;
+                system("pause");
 				return "\0";
 			}
 			else {
@@ -2030,9 +2066,8 @@ string update_pw() {
 			cout << setw(30) << left << "Confirm NEW Password: ";
 			getline(cin, accountPassword_confirm);
 			if (t.stop() > 15) {
-				cout << "-TIMEOUT-" << endl;
-				cout << "Return To Main Menu" << endl;
-				system("pause");
+				cout << "You are logged out as the system is idle for 15 seconds. Please login again." << endl;
+                system("pause");
 				return "\0";
 			}
 			else {
@@ -2046,3 +2081,4 @@ string update_pw() {
 	return accountPassword;
 }
 
+/*Copyright 2019 Wong Kong Lun . All rights reserved*/
